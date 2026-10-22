@@ -1,0 +1,49 @@
+# Reviewed OSV exceptions. Each entry has a reason and an expiry.
+# Reviewed 2026-10-22 when CI moved to bookchaowalit/platform-ci-workflows v1.1.1.
+# `npm audit fix` (no breaking changes) changes nothing here. Every advisory below
+# either has no fixed release, or is fixed only in a new major that the pinned
+# React Native toolchain cannot load (checked: image-size 2.x exports an object,
+# so metro's `require("image-size")(buffer)` would throw; decode-uri-component
+# 0.5 is ESM-only, so query-string 7's `require()` would break). The real fix is
+# a React Native upgrade, tracked in docs/UPGRADE-PLAN.md.
+#
+# Context: this app has no backend, no deep-link config and no generated
+# android/ios projects. The JS bundle contains the app code and the runtime
+# packages in package.json "dependencies"; everything else is build/dev tooling.
+
+# Runtime (bundled): React Navigation core -> query-string -> decode-uri-component.
+[[IgnoredVulns]]
+id = "GHSA-vcc3-ghjq-m6fr"
+ignoreUntil = 2027-01-22
+reason = "decode-uri-component DoS on malformed percent-encoding; only reached through React Navigation deep-link parsing, and the app passes no `linking` config, so no external URL is parsed. Fixed 0.5.0 is ESM-only and breaks query-string 7."
+
+# Build / dev tooling only (never in the app bundle).
+[[IgnoredVulns]]
+id = "GHSA-5p2g-fcmc-qvqq"
+ignoreUntil = 2027-01-22
+reason = "image-size JXL/HEIF parser loop; used by metro at bundle time on the repo's own image assets only. Fixed 2.x changes the export shape that metro requires."
+
+[[IgnoredVulns]]
+id = "GHSA-w3rx-r6r6-pgpr"
+ignoreUntil = 2027-01-22
+reason = "image-size ICNS parser loop; same as above, bundle-time only on the repo's own assets."
+
+[[IgnoredVulns]]
+id = "GHSA-vfj7-8cjw-p6xm"
+ignoreUntil = 2027-01-22
+reason = "braces stack exhaustion on deeply nested patterns; dev-only via micromatch/fast-glob in the RN CLI and Jest, which glob the repo's own fixed patterns. No fixed release."
+
+[[IgnoredVulns]]
+id = "GHSA-gh4j-gqv2-49f6"
+ignoreUntil = 2027-01-22
+reason = "fast-xml-parser XMLBuilder comment/CDATA injection; dev-only via the RN CLI platform plugins, which read local Android/iOS project files (none exist here). Fixed only in 5.x, which the CLI does not support."
+
+[[IgnoredVulns]]
+id = "GHSA-hp3w-g68c-fv3c"
+ignoreUntil = 2027-01-22
+reason = "sprintf-js precision DoS; dev-only via metro-config -> cosmiconfig -> js-yaml -> argparse, formatting fixed CLI help strings. No fixed release."
+
+[[IgnoredVulns]]
+id = "GHSA-2p57-rm9w-gvfp"
+ignoreUntil = 2027-01-22
+reason = "ip isPublic() misclassification (SSRF helper); dev-only via @react-native-community/cli-doctor, which prints local network info and makes no allow/deny decisions. No fixed release."

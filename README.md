@@ -6,6 +6,9 @@ React Native CLI app for tracking a solo business portfolio: ventures
 > Naming note: this repository is called `reading-mobile`, but its code has
 > always been the SoloEmpire business dashboard. The owner should decide
 > whether to rename the repo or move this app (see `docs/UPGRADE-PLAN.md`).
+>
+> This is its own app (React Native 0.73), not one of the React Native CLI
+> template copies. Product scope: [PRODUCT.md](PRODUCT.md).
 
 ## Features
 
@@ -43,4 +46,9 @@ mkdir -p dist && npm run bundle:android   # Metro bundle smoke check
 ```
 
 Pure logic lives in `src/lib/business.ts` (Jest tests in `__tests__/`).
-CI (`.github/workflows/build.yml`) runs all of the above and fails on errors.
+CI (`.github/workflows/ci.yml`) calls the shared
+`bookchaowalit/platform-ci-workflows` v1.1.1 jobs (pinned by SHA): `npm ci`,
+lint, strict typecheck, Jest with a line-coverage gate, the Android bundle,
+and the security scans. Reviewed scanner exceptions (dev-tooling advisories
+that only a React Native upgrade fixes) are in `osv-scanner.toml` and
+`.trivyignore`.

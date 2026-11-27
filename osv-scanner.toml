@@ -64,3 +64,8 @@ reason = "minimatch globparts amplification DoS; fixed only in minimatch 11; dev
 id = "GHSA-qr28-fpjm-wq7f"
 ignoreUntil = 2027-01-22
 reason = "decode-uri-component quadratic DoS; fixed only in ESM-only 0.5.1, but query-string 7 (required by expo-router 5.1) needs the CJS 0.2.x. Worst case a malformed deep link stalls this local app instance; no server."
+
+[[IgnoredVulns]]
+id = "GHSA-474x-hrwr-fgx4"
+ignoreUntil = 2027-01-22
+reason = "fast-xml-parser quadratic scan of unterminated stop-node tags; fixed only in 5.12; 4.x is required by @react-native-community/cli-platform-android/apple, which parse this repo's own native project XML at build time. Not in the app bundle. Reviewed 2026-11-27."
